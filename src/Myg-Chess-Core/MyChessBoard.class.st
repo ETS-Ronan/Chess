@@ -235,6 +235,10 @@ MyChessBoard >> selected: aMyChessSquare [
 	selected := aMyChessSquare
 ]
 
+{ #category : 'as yet unclassified' }
+MyChessBoard >> simulateMove: aPiece to: aSquare [
+]
+
 { #category : 'highlighting' }
 MyChessBoard >> unhighLightTargets: squares [
 
