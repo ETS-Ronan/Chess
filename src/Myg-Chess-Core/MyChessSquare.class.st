@@ -258,56 +258,22 @@ MyChessSquare >> renderKing: aPiece [
 { #category : 'rendering' }
 MyChessSquare >> renderKnight: aPiece [
 
-	^ aPiece isWhite
-		  ifFalse: [ color isBlack
-				  ifFalse: [ 'M' ]
-				  ifTrue: [ 'm' ] ]
-		  ifTrue: [
-			  color isBlack
-				  ifFalse: [ 'N' ]
-				  ifTrue: [ 'n' ] ]
+	 ^ self renderFromTable: aPiece
 ]
 
 { #category : 'rendering' }
 MyChessSquare >> renderPawn: aPiece [
-
-	^ aPiece isWhite
-		  ifFalse: [
-			  color isBlack
-				  ifFalse: [ 'O' ]
-				  ifTrue: [ 'o' ] ]
-		  ifTrue: [
-			  color isBlack
-				  ifFalse: [ 'P' ]
-				  ifTrue: [ 'p' ] ]
+    ^ self renderFromTable: aPiece
 ]
 
 { #category : 'rendering' }
 MyChessSquare >> renderQueen: aPiece [
-
-	^ aPiece isWhite
-		  ifFalse: [
-			  color isBlack
-				  ifFalse: [ 'W' ]
-				  ifTrue: [ 'w' ] ]
-		  ifTrue: [
-			  color isBlack
-				  ifFalse: [ 'Q' ]
-				  ifTrue: [ 'q' ] ]
+       ^ self renderFromTable: aPiece
 ]
 
 { #category : 'rendering' }
 MyChessSquare >> renderRook: aPiece [
-
-	^ aPiece isWhite
-		  ifFalse: [
-			  color isBlack
-				  ifFalse: [ 'T' ]
-				  ifTrue: [ 't' ] ]
-		  ifTrue: [
-			  color isBlack
-				  ifFalse: [ 'R' ]
-				  ifTrue: [ 'r' ] ]
+      ^ self renderFromTable: aPiece
 ]
 
 { #category : 'accessing' }
