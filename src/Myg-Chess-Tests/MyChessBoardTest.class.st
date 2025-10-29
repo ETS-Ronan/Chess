@@ -11,6 +11,15 @@ Class {
 	#package : 'Myg-Chess-Tests'
 }
 
+{ #category : 'running' }
+MyChessBoardTest >> setUp [
+	super setUp.
+	board := MyChessBoard empty.
+   board at: 'e1' put: (king := MyKing white).
+   board at: 'e8' put: (rook := MyRook black).
+   board at: 'c3' put: (bishop := MyBishop white).
+]
+
 { #category : 'tests' }
 MyChessBoardTest >> testSimulateMoveBlocksAttack [
 	"Le fou va en e2 et bloque la tour"
