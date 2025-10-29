@@ -49,6 +49,16 @@ MyChessGame class >> new [
 	self error: 'Please use one of the other constructors'
 ]
 
+{ #category : 'accessing' }
+MyChessGame >> blackPlayer [
+	^ blackPlayer
+]
+
+{ #category : 'accessing' }
+MyChessGame >> board [
+	^ board
+]
+
 { #category : 'playing' }
 MyChessGame >> checkForMate [
 
@@ -63,8 +73,9 @@ MyChessGame >> initialize [
 	self initializeFonts.
 
 	moves := OrderedCollection new.
-	whitePlayer := MyPlayer new white game: self.
-	blackPlayer := MyPlayer new black game: self
+	whitePlayer := MyPlayer new white game: self; strategy: MyWorstMoveStrategy new.
+	blackPlayer := MyPlayer new black game: self; strategy: MyAlphaMoveStrategy new.
+
 ]
 
 { #category : 'initialization' }
@@ -173,4 +184,14 @@ MyChessGame >> recordMovementOf: aPiece to: aSquare [
 	].
 	
 	movesLabel text: movesText
+]
+
+{ #category : 'accessing' }
+MyChessGame >> whitePlayer [
+	^ whitePlayer
+]
+
+{ #category : 'accessing' }
+MyChessGame >> whitePlayer: aPlayer [
+	whitePlayer := aPlayer
 ]

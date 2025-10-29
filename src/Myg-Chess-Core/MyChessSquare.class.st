@@ -200,80 +200,85 @@ MyChessSquare >> printOn: aStream [
 
 { #category : 'rendering' }
 MyChessSquare >> renderBishop: aPiece [
-     ^ self renderFromTable: aPiece
-]
 
-{ #category : 'rendering' }
-MyChessSquare >> renderFromTable: aPiece [
-	"Table dispatch : choisit le symbole de la pièce selon son type et sa couleur."
-	| cls typeSym colorKey base table |
-
-	aPiece ifNil: [ ^ (self color isBlack ifTrue: [ 'x' ] ifFalse: [ 'z' ]) ].
-
-	"1) Identifier le type de pièce"
-	cls := aPiece class name asString.
-	typeSym := (cls includesSubstring: 'King')
-		ifTrue: [ #King ]
-		ifFalse: [
-			(cls includesSubstring: 'Queen')
-				ifTrue: [ #Queen ]
-				ifFalse: [
-					(cls includesSubstring: 'Rook')
-						ifTrue: [ #Rook ]
-						ifFalse: [
-							(cls includesSubstring: 'Bishop')
-								ifTrue: [ #Bishop ]
-								ifFalse: [
-									(cls includesSubstring: 'Knight')
-										ifTrue: [ #Knight ]
-										ifFalse: [ #Pawn ] ]]]].
-
-	"2) Couleur de la pièce"
-	colorKey := aPiece isWhite ifTrue: [ #White ] ifFalse: [ #Black ].
-
-	"3) Table de correspondance type+couleur -> lettre"
-	table := {
-		#(King   White) -> 'K'.  #(Queen  White) -> 'Q'.
-		#(Rook   White) -> 'R'.  #(Bishop White) -> 'B'.
-		#(Knight White) -> 'N'.  #(Pawn   White) -> 'P'.
-		#(King   Black) -> 'L'.  #(Queen  Black) -> 'W'.
-		#(Rook   Black) -> 'T'.  #(Bishop Black) -> 'V'.
-		#(Knight Black) -> 'M'.  #(Pawn   Black) -> 'O'.
-	} asDictionary.
-
-	base := table at: { typeSym. colorKey } ifAbsent: [ '?' ].
-
-	"4) Sur case noire : lettre en minuscule"
-	^ self color isBlack
-		ifTrue: [ base asLowercase ]
-		ifFalse: [ base ]
-
+	^ aPiece isWhite
+		  ifTrue: [
+			  color isBlack
+				  ifFalse: [ 'B' ]
+				  ifTrue: [ 'b' ] ]
+		  ifFalse: [
+			  color isBlack
+				  ifFalse: [ 'V' ]
+				  ifTrue: [ 'v' ] ]
 ]
 
 { #category : 'rendering' }
 MyChessSquare >> renderKing: aPiece [
-     ^ self renderFromTable: aPiece
+
+	^ aPiece isWhite
+		  ifFalse: [
+			  color isBlack
+				  ifFalse: [ 'L' ]
+				  ifTrue: [ 'l' ] ]
+		  ifTrue: [
+			  color isBlack
+				  ifFalse: [ 'K' ]
+				  ifTrue: [ 'k' ] ]
 ]
 
 { #category : 'rendering' }
 MyChessSquare >> renderKnight: aPiece [
 
-	 ^ self renderFromTable: aPiece
+	^ aPiece isWhite
+		  ifFalse: [ color isBlack
+				  ifFalse: [ 'M' ]
+				  ifTrue: [ 'm' ] ]
+		  ifTrue: [
+			  color isBlack
+				  ifFalse: [ 'N' ]
+				  ifTrue: [ 'n' ] ]
 ]
 
 { #category : 'rendering' }
 MyChessSquare >> renderPawn: aPiece [
-    ^ self renderFromTable: aPiece
+
+	^ aPiece isWhite
+		  ifFalse: [
+			  color isBlack
+				  ifFalse: [ 'O' ]
+				  ifTrue: [ 'o' ] ]
+		  ifTrue: [
+			  color isBlack
+				  ifFalse: [ 'P' ]
+				  ifTrue: [ 'p' ] ]
 ]
 
 { #category : 'rendering' }
 MyChessSquare >> renderQueen: aPiece [
-       ^ self renderFromTable: aPiece
+
+	^ aPiece isWhite
+		  ifFalse: [
+			  color isBlack
+				  ifFalse: [ 'W' ]
+				  ifTrue: [ 'w' ] ]
+		  ifTrue: [
+			  color isBlack
+				  ifFalse: [ 'Q' ]
+				  ifTrue: [ 'q' ] ]
 ]
 
 { #category : 'rendering' }
 MyChessSquare >> renderRook: aPiece [
-      ^ self renderFromTable: aPiece
+
+	^ aPiece isWhite
+		  ifFalse: [
+			  color isBlack
+				  ifFalse: [ 'T' ]
+				  ifTrue: [ 't' ] ]
+		  ifTrue: [
+			  color isBlack
+				  ifFalse: [ 'R' ]
+				  ifTrue: [ 'r' ] ]
 ]
 
 { #category : 'accessing' }
