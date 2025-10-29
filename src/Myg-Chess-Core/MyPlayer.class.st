@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'color',
-		'game'
+		'game',
+		'strategy'
 	],
 	#category : 'Myg-Chess-Core',
 	#package : 'Myg-Chess-Core'
@@ -59,23 +60,22 @@ MyPlayer >> pieces [
 
 { #category : 'playing' }
 MyPlayer >> play [
+    | move |
+    move := strategy chooseMove.
+    move ifNil: [ self halt: 'NO MOVES AVAILABLE!!' ].
+    game move: move first to: move second.
 
-	| pieces |
-	pieces := self king isInCheck
-		          ifTrue: [ OrderedCollection with: self king ]
-		          ifFalse: [ self pieces copy asOrderedCollection ].
+]
 
+{ #category : 'accessing' }
+MyPlayer >> strategy [
+    ^ strategy
+]
 
-	[ pieces notEmpty ] whileTrue: [
-		| piece legalMoves |
-		piece := pieces atRandom.
-		pieces remove: piece.
-		legalMoves := piece legalTargetSquares.
-		legalMoves ifNotEmpty: [
-			game move: piece to: legalMoves atRandom.
-			^ self ] ].
-
-	self halt: 'NO MOVES AVAILABLE!'
+{ #category : 'accessing' }
+MyPlayer >> strategy: aStrategy [
+    strategy := aStrategy.
+    strategy player: self.
 ]
 
 { #category : 'constants' }
