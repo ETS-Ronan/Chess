@@ -235,8 +235,30 @@ MyChessBoard >> selected: aMyChessSquare [
 	selected := aMyChessSquare
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'moves' }
 MyChessBoard >> simulateMove: aPiece to: aSquare [
+
+	| from captured result myKing |
+	from := aPiece square.
+	captured := aSquare contents.
+
+	"faire le déplacement temporaire"
+	from emptyContents.
+	aPiece square: aSquare.
+	aSquare contents: aPiece.
+
+	"vérifier si le roi est encore en échec"
+	myKing := self pieces detect: [ :p |
+		          p notNil and: [
+			          p class = MyKing and: [ p color = aPiece color ] ] ].
+	result := myKing isInCheck not.
+
+	"annuler le déplacement"
+	aSquare contents: captured.
+	aPiece square: from.
+	from contents: aPiece.
+
+	^ result
 ]
 
 { #category : 'highlighting' }
