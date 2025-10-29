@@ -165,6 +165,7 @@ MyPiece >> legalTargetSquares [
 MyPiece >> moveTo: aSquare [
 
 	(self legalTargetSquares includes: aSquare) ifFalse: [ ^ self ].
+	(self board simulateMove: self to: aSquare) ifFalse: [ ^ self ].
 
 	square emptyContents.
 	square := aSquare.
