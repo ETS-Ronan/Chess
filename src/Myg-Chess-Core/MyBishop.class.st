@@ -20,8 +20,20 @@ MyBishop >> renderPieceOn: aSquare [
 { #category : 'rendering' }
 MyBishop >> targetSquaresLegal: aBoolean [
 
-	^ (self upRightDiagonalLegal: aBoolean)
-	  , (self upLeftDiagonalLegal: aBoolean)
-	  , (self downRightDiagonalLegal: aBoolean)
-	  , (self downLeftDiagonalLegal: aBoolean)
+| selectors targets |
+	selectors := #(
+		upRightDiagonalLegal:
+		upLeftDiagonalLegal:
+		downRightDiagonalLegal:
+		downLeftDiagonalLegal:
+	).
+	targets := OrderedCollection new.
+	selectors do: [ :sel | targets addAll: (self perform: sel with: aBoolean) ].
+	^ targets
+]
+
+{ #category : 'evaluating' }
+MyBishop >> value [
+    ^ 3
+
 ]

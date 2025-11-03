@@ -35,25 +35,15 @@ MyKing >> id [
 
 { #category : 'testing' }
 MyKing >> isCheckMated [
-	"We check if the opponent pieces target all my potential movements and myself"
+	^ self legalTargetSquares isEmpty
+		and: [ (self threatenedSquares) includes: self square ]
 
-	| threatenedSquares |
-	threatenedSquares := self opponentPieces flatCollect: [ :e |
-		                     e attackingSquares ].
-
-	^ self legalTargetSquares isEmpty and: [
-		  threatenedSquares includes: self square ]
 ]
 
 { #category : 'testing' }
 MyKing >> isInCheck [
-	"We check if the opponent pieces target all my potential movements and myself"
+	^ (self threatenedSquares) includes: self square
 
-	| threatenedSquares |
-	threatenedSquares := self opponentPieces flatCollect: [ :e |
-		                     e attackingSquares ].
-
-	^ threatenedSquares includes: self square
 ]
 
 { #category : 'testing' }
@@ -62,11 +52,8 @@ MyKing >> isKing [
 	^ true
 ]
 
-{ #category : 'accessing' }
-MyKing >> opponentPieces [
-
-	^ self board pieces select: [ :e |
-		  e notNil and: [ e color = color negated ] ]
+{ #category : 'tests' }
+MyKing >> opponentPieces [ ^ { Smalltalk globals at: #__foe }
 ]
 
 { #category : 'rendering' }
@@ -85,4 +72,17 @@ MyKing >> targetSquaresLegal: aBoolean [
 		s notNil and: [
 			(threatenedSquares includes: s) not and: [
 				s hasPiece not or: [ s contents color ~= color ] ] ] ]
+]
+
+{ #category : 'as yet unclassified' }
+MyKing >> threatenedSquares [
+	"Renvoie toutes les cases attaquées par les pièces adverses."
+	^ (self opponentPieces flatCollect: [ :p | p attackingSquares ]) asSet
+
+]
+
+{ #category : 'testing' }
+MyKing >> value [
+    ^ 100
+
 ]

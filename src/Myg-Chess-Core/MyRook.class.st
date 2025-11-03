@@ -28,3 +28,9 @@ MyRook >> targetSquaresLegal: aBoolean [
 	^ (self upFileLegal: aBoolean) , (self downFileLegal: aBoolean)
 	  , (self leftFileLegal: aBoolean) , (self rightFileLegal: aBoolean)
 ]
+
+{ #category : 'rendering' }
+MyRook >> value [
+    ^ 5
+
+]

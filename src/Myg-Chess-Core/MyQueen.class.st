@@ -25,3 +25,9 @@ MyQueen >> targetSquaresLegal: aBoolean [
 	             , (self rightFileLegal: aBoolean).
 	^ likeABishop , likeARook
 ]
+
+{ #category : 'rendering' }
+MyQueen >> value [
+    ^ 9
+
+]

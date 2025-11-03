@@ -45,6 +45,18 @@ MyChessSquare >> + aPoint [
 	^ board at: column , file ifAbsent: [ ^ nil ]
 ]
 
+{ #category : 'instance creation' }
+MyChessSquare >> applyCaseForSquareTo: aGlyph [
+	"Light square keeps case; dark square uses lowercase."
+	| transform |
+	transform := Dictionary newFrom: {
+		#light -> [ :c | c ].
+		#dark  -> [ :c | c asLowercase ]
+	}.
+	^ (transform at: self squareColorKey) value: aGlyph
+
+]
+
 { #category : 'accessing' }
 MyChessSquare >> board [
 	^ board
@@ -87,20 +99,21 @@ MyChessSquare >> contents [
 
 { #category : 'accessing' }
 MyChessSquare >> contents: aPiece [
-
-	| text |
+	| text chooser |
 	contents := aPiece.
 
-	text := contents
-		        ifNil: [
-			        color isBlack
-				        ifFalse: [ 'z' ]
-				        ifTrue: [ 'x' ] ]
-		        ifNotNil: [ contents renderPieceOn: self ].
+	chooser := Dictionary newFrom: {
+		true  -> [ self emptyGlyph ].
+		false -> [ contents renderPieceOn: self ]
+	}.
+
+	text := (chooser at: contents isNil) value.
+
 	piece text: (text asRopedText
-			 fontSize: 48;
-			 foreground: self foreground;
-			 fontName: MyOpenChessDownloadedFont new familyName)
+		fontSize: 48;
+		foreground: self foreground;
+		fontName: MyOpenChessDownloadedFont new familyName)
+
 ]
 
 { #category : 'api - configuration' }
@@ -115,6 +128,16 @@ MyChessSquare >> emptyContents [
 	self contents: nil
 ]
 
+{ #category : 'instance creation' }
+MyChessSquare >> emptyGlyph [
+	"Empty-square glyph by square color, no if."
+	^ (Dictionary newFrom: {
+		#light -> 'z'.
+		#dark  -> 'x'
+	}) at: self squareColorKey
+
+]
+
 { #category : 'accessing' }
 MyChessSquare >> file [
 	
@@ -127,6 +150,20 @@ MyChessSquare >> foreground [
 	^ color isBlack
 		ifTrue: [ board blackColor ]
 		ifFalse: [ board whiteColor ]
+]
+
+{ #category : 'instance creation' }
+MyChessSquare >> glyphTable [
+	"Base glyph per piece type and piece color (no ifs)."
+	^ Dictionary newFrom: {
+		#MyKing   -> (Dictionary newFrom: { #white -> 'K'. #black -> 'L' }).
+		#MyQueen  -> (Dictionary newFrom: { #white -> 'Q'. #black -> 'W' }).
+		#MyBishop -> (Dictionary newFrom: { #white -> 'B'. #black -> 'V' }).
+		#MyKnight -> (Dictionary newFrom: { #white -> 'N'. #black -> 'M' }).
+		#MyRook   -> (Dictionary newFrom: { #white -> 'R'. #black -> 'T' }).
+		#MyPawn   -> (Dictionary newFrom: { #white -> 'P'. #black -> 'O' })
+	}
+
 ]
 
 { #category : 'testing' }
@@ -188,6 +225,16 @@ MyChessSquare >> name: aString [
 	label text: (name asRopedText foreground: color negated)
 ]
 
+{ #category : 'instance creation' }
+MyChessSquare >> pieceColorKeyFor: aPiece [
+	"true/false -> #white/#black via table dispatch."
+	^ (Dictionary newFrom: {
+		true  -> #white.
+		false -> #black
+	}) at: aPiece isWhite
+
+]
+
 { #category : 'printing' }
 MyChessSquare >> printOn: aStream [
 	"Generate a string representation of the receiver based on its instance variables."
@@ -199,86 +246,44 @@ MyChessSquare >> printOn: aStream [
 ]
 
 { #category : 'rendering' }
-MyChessSquare >> renderBishop: aPiece [
+MyChessSquare >> renderBishop: aPiece [  ^ self renderFromTable: aPiece
+]
 
-	^ aPiece isWhite
-		  ifTrue: [
-			  color isBlack
-				  ifFalse: [ 'B' ]
-				  ifTrue: [ 'b' ] ]
-		  ifFalse: [
-			  color isBlack
-				  ifFalse: [ 'V' ]
-				  ifTrue: [ 'v' ] ]
+{ #category : 'instance creation' }
+MyChessSquare >> renderFromTable: aPiece [
+	"Generic renderer using tables only."
+	| typeKey baseGlyph |
+	aPiece ifNil: [ ^ self emptyGlyph ].
+
+	typeKey := aPiece class name asSymbol.
+	baseGlyph :=
+		((self glyphTable at: typeKey ifAbsent: [ Dictionary new ])
+			at: (self pieceColorKeyFor: aPiece)
+			ifAbsent: [ '?' ]).
+
+	^ self applyCaseForSquareTo: baseGlyph
+
 ]
 
 { #category : 'rendering' }
-MyChessSquare >> renderKing: aPiece [
-
-	^ aPiece isWhite
-		  ifFalse: [
-			  color isBlack
-				  ifFalse: [ 'L' ]
-				  ifTrue: [ 'l' ] ]
-		  ifTrue: [
-			  color isBlack
-				  ifFalse: [ 'K' ]
-				  ifTrue: [ 'k' ] ]
+MyChessSquare >> renderKing:   aPiece [  ^ self renderFromTable: aPiece
 ]
 
 { #category : 'rendering' }
-MyChessSquare >> renderKnight: aPiece [
-
-	^ aPiece isWhite
-		  ifFalse: [ color isBlack
-				  ifFalse: [ 'M' ]
-				  ifTrue: [ 'm' ] ]
-		  ifTrue: [
-			  color isBlack
-				  ifFalse: [ 'N' ]
-				  ifTrue: [ 'n' ] ]
+MyChessSquare >> renderKnight: aPiece [  ^ self renderFromTable: aPiece
 ]
 
 { #category : 'rendering' }
-MyChessSquare >> renderPawn: aPiece [
-
-	^ aPiece isWhite
-		  ifFalse: [
-			  color isBlack
-				  ifFalse: [ 'O' ]
-				  ifTrue: [ 'o' ] ]
-		  ifTrue: [
-			  color isBlack
-				  ifFalse: [ 'P' ]
-				  ifTrue: [ 'p' ] ]
+MyChessSquare >> renderPawn:   aPiece [  ^ self renderFromTable: aPiece
 ]
 
 { #category : 'rendering' }
-MyChessSquare >> renderQueen: aPiece [
-
-	^ aPiece isWhite
-		  ifFalse: [
-			  color isBlack
-				  ifFalse: [ 'W' ]
-				  ifTrue: [ 'w' ] ]
-		  ifTrue: [
-			  color isBlack
-				  ifFalse: [ 'Q' ]
-				  ifTrue: [ 'q' ] ]
+MyChessSquare >> renderQueen:  aPiece [  ^ self renderFromTable: aPiece
 ]
 
 { #category : 'rendering' }
-MyChessSquare >> renderRook: aPiece [
+MyChessSquare >> renderRook:   aPiece [  ^ self renderFromTable: aPiece
 
-	^ aPiece isWhite
-		  ifFalse: [
-			  color isBlack
-				  ifFalse: [ 'T' ]
-				  ifTrue: [ 't' ] ]
-		  ifTrue: [
-			  color isBlack
-				  ifFalse: [ 'R' ]
-				  ifTrue: [ 'r' ] ]
 ]
 
 { #category : 'accessing' }
@@ -291,6 +296,16 @@ MyChessSquare >> right [
 MyChessSquare >> select [
 	
 	self border: Color green
+]
+
+{ #category : 'instance creation' }
+MyChessSquare >> squareColorKey [
+	"Return #light or #dark from square color, no if."
+	^ (Dictionary newFrom: {
+		true  -> #dark.
+		false -> #light
+	}) at: color isBlack
+
 ]
 
 { #category : 'highlighting' }

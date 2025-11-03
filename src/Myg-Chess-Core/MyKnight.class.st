@@ -32,3 +32,9 @@ MyKnight >> targetSquaresLegal: aBoolean [
 		  select: [ :s |
 			  s notNil and: [ s hasPiece not or: [ s contents color ~= color ] ] ]
 ]
+
+{ #category : 'rendering' }
+MyKnight >> value [
+    ^ 3
+
+]

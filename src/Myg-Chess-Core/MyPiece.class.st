@@ -247,13 +247,7 @@ MyPiece >> upRightDiagonalLegal: aBoolean [
 
 { #category : 'evaluating' }
 MyPiece >> value [
-    "Retourne la valeur matérielle de la pièce pour évaluer un coup."
-    (self isKindOf: MyPawn) ifTrue: [ ^ 1 ].
-    (self isKindOf: MyKnight) ifTrue: [ ^ 3 ].
-    (self isKindOf: MyBishop) ifTrue: [ ^ 3 ].
-    (self isKindOf: MyRook) ifTrue: [ ^ 5 ].
-    (self isKindOf: MyQueen) ifTrue: [ ^ 9 ].
-    (self isKindOf: MyKing) ifTrue: [ ^ 100 ].
-    ^ 0
+    ^ self subclassResponsibility
+
 
 ]
