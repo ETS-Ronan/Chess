@@ -280,6 +280,7 @@ Implémentation de quatre stratégies distinctes :
 - AlphabeticalStrategy → choisit le mouvement dont la clé (pièce + case) est la première par ordre alphabétique.
 - CaptureStrategy → privilégie les mouvements qui capturent une pièce ennemie, sinon joue un coup normal.
 - WorstStrategy → choisit le coup offrant le plus petit gain (capture de plus faible valeur).
+
  Tests
 -Création de tests unitaires pour chaque stratégie, vérifiant le bon choix de mouvement selon les règles de la stratégie.
 
