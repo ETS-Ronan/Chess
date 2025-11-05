@@ -270,20 +270,6 @@ https://www.yacpdb.org/#static/home
 BlParallelUniverse all do: #startUniverse.
 ```
 
-## Kata1 : Implement More Bot Gaming Stratégies
-Développer plusieurs stratégies de jeu automatisées pour un joueur (bot) dans un jeu d’échecs, en appliquant le Design Pattern Strategy.
-
-Réalisation
-Mise en place du Strategy Pattern pour permettre au bot de choisir dynamiquement une stratégie de jeu.
-Implémentation de quatre stratégies distinctes :
-- RandomStrategy → joue un coup aléatoire parmi les mouvements possibles.
-- AlphabeticalStrategy → choisit le mouvement dont la clé (pièce + case) est la première par ordre alphabétique.
-- CaptureStrategy → privilégie les mouvements qui capturent une pièce ennemie, sinon joue un coup normal.
-- WorstStrategy → choisit le coup offrant le plus petit gain (capture de plus faible valeur).
-
- Tests
--Création de tests unitaires pour chaque stratégie, vérifiant le bon choix de mouvement selon les règles de la stratégie.
-
 
 
 
