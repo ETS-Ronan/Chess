@@ -87,3 +87,93 @@ My main goal in this kata was to refactor the code to add a way to block illegal
 I didn’t use a design pattern because I wanted to keep the changes small and simple.
 That’s why I just added the `simulateMove:to:` method and made the game call it before moving any piece.
 It was the cleanest way to make the new rule work without breaking the rest of the project.
+
+---
+
+---
+
+## Kata Réalisé
+### *Implement More Bot Gaming Strategies*
+**Étudiant :** Aymen Messikh  
+### But
+Créer plusieurs stratégies de jeu pour le bot afin de simuler différents comportements.  
+---
+
+## Stratégies Implémentées
+
+| Stratégie | Description |
+|------------|--------------|
+| **RandomStrategy** | Choisit un coup au hasard parmi tous les mouvements possibles. |
+| **AlphabeticalStrategy** | Trie tous les coups par ordre alphabétique (nom de la pièce + case cible) et joue le premier. |
+| **CaptureStrategy** | Joue en priorité un coup qui capture une pièce adverse ; sinon, un coup normal aléatoire. |
+| **WorstStrategy** | Évalue chaque coup selon la valeur de la pièce adverse capturée et choisit le coup avec le plus petit gain. |
+
+---
+
+## Design Pattern Utilisé
+
+### Strategy Pattern
+Le pattern **Strategy** a été appliqué pour permettre au bot de changer de stratégie de manière dynamique.  
+Chaque stratégie implémente la même  `chooseMove` et encapsule son propre algorithme de sélection de coup.
+
+Ce design permet :
+- Une **extensibilité facile** (ajout de nouvelles stratégies sans modifier les autres classes).
+- Une **meilleure testabilité**.
+- Une **séparation claire des responsabilités**.
+
+---
+
+##  Tests des Stratégies Implémentées
+
+Chaque stratégie a été testée individuellement à l’aide de **classes de tests dédiées**, afin de vérifier le bon comportement du moteur de décision du bot dans différentes situations d’échiquier.
+
+###  Outils
+Les tests ont été réalisés avec **Pharo Test Framework**, et tous les scénarios ont été validés avec succès .
+
+---
+
+### MyRandomStrategyTests
+Vérifie le comportement de la **stratégie aléatoire** :
+
+- Renvoie toujours un **coup valide** lorsque des mouvements sont possibles.  
+- Donne la **priorité au roi** lorsqu’il est en échec.  
+- Retourne `nil` lorsque **aucun coup n’est possible** (roi encerclé, sans mouvement disponible).  
+
+Ces tests garantissent que le choix du coup reste cohérent même dans des situations complexes.
+
+---
+
+### MyAlphaMoveStrategyTests
+Valide la **stratégie alphabétique** :
+
+- Choisit le **premier coup dans l’ordre alphabétique** parmi tous les mouvements disponibles.  
+- Retourne `nil` lorsqu’il n’existe **aucun déplacement légal**.  
+
+Ces tests assurent le bon fonctionnement du tri et la cohérence du choix alphabétique.
+
+---
+
+###  MyCaptureStrategyTests
+Teste la **stratégie de capture** :
+
+- Privilégie les **coups de capture** lorsqu’ils existent.  
+- **Ignore les pièces de la même couleur**, empêchant les captures invalides.  
+- Retourne `nil` lorsqu’**aucune capture n’est réalisable**.  
+
+Ces tests confirment la bonne détection des cibles adverses et la priorisation correcte des mouvements.
+
+---
+
+###  MyWorstMoveStrategyTests
+Évalue la **stratégie “worst”**, qui choisit le **mouvement le moins avantageux** :
+
+- Évite les **captures rentables** et sélectionne le **coup le moins performant**.  
+- Retourne `nil` lorsqu’**aucune pièce ne peut jouer**.  
+
+Cette série de tests valide la logique inverse de la stratégie de capture et garantit le respect du comportement attendu.
+
+---
+
+### Résultats
+Tous les tests ont été exécutés avec succès, confirmant le bon fonctionnement des quatre stratégies et leur conformité à la méthode `chooseMove`.
+
