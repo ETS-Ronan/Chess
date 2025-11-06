@@ -37,15 +37,26 @@ MyWorstMoveStrategyTests >> testChoosesNonCapturingMoveOverCapture [
 { #category : 'tests' }
 MyWorstMoveStrategyTests >> testReturnsNilWhenNoMoves [
 	| move |
-	board at: 'e4' put: MyKing white.
-	board at: 'e5' put: MyRook black.
-	board at: 'e3' put: MyRook black.
-	board at: 'd4' put: MyRook black.
-	board at: 'f4' put: MyRook black.
+	"Position sans aucun coup blanc légal"
+board at: 'e4' put: MyKing white.
+
+board at: 'e5' put: MyKing black.
+board at: 'e3' put: MyKing black.
+board at: 'd4' put: MyKing black.
+board at: 'f4' put: MyKing black.
+board at: 'd5' put: MyKing black.
+board at: 'f5' put: MyKing black.
+board at: 'd3' put: MyKing black.
+board at: 'f3' put: MyKing black.
+
+player game: board.
+move := strategy chooseMove.
+self assert: move isNil.
+
 	
 	player game: board.
 	
 	move := strategy chooseMove.
 	
-	self assert: move isNil.
+	self assert: (move isNil or: [ move isEmpty ]).
 ]
